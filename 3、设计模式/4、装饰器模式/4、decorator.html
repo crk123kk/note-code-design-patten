@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>装饰器的应用</title>
+  </head>
+  <body>
+    <button data-name="watermelon" id="watermelon">西瓜</button>
+    <button data-name="apple" id="apple">苹果</button>
+    <script>
+      let watermelon = document.getElementById('watermelon');
+      let apple = document.getElementById('apple');
+      //   function click() {
+      //     console.log('你点击了' + this.dataset.name);
+      //     let img = new Image();
+      //     img.src = `http://localhost:3000/report?name=` + this.dataset.name;
+      //   }
+      /**
+       * 上述方式将 点击和校验的逻辑 耦合在一起了，我们可以通过装饰器进行解耦合
+       * */
+
+      Function.prototype.after = function (afterFn) {
+        let _this = this;
+        return function () {
+          _this.apply(this, arguments);
+          afterFn.apply(this, arguments);
+        };
+      };
+      function click() {
+        console.log('你点击了' + this.dataset.name);
+      }
+      click = click.after(function () {
+        let img = new Image();
+        img.src = `http://localhost:3000/report?name=` + this.dataset.name;
+      });
+
+      Array.from(document.querySelectorAll('button')).forEach((button) => {
+        button.addEventListener('click', click);
+      });
+    </script>
+  </body>
+</html>

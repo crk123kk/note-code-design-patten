@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    用户名: <input type="text" id="username" /> 密码:<input
+      type="text"
+      id="password"
+    />
+    <button id="submit-btn">提交</button>
+    <script>
+      //   function submit() {
+      //     let username = document.getElementById('username').value;
+      //     if (!username) {
+      //       return alert('用户名没有输入');
+      //     }
+      //     if (username.length < 6) {
+      //       return alert('用户名长度不够');
+      //     }
+      //     console.log('提交表单');
+      //   }
+      /**
+       *  同样的问题，校验逻辑和submit 耦合在一起了，不符合单一职责的设计原则，所以需要解耦合
+       * */
+
+      Function.prototype.before = function (beforeFn) {
+        let _this = this;
+        return function () {
+          beforeFn.apply(this, arguments);
+          _this.apply(this, arguments);
+        };
+      };
+
+      function submit() {
+        console.log('提交表单');
+      }
+      /**
+       *  这里需要注意一点，是需要先装饰长度不够，再装饰不能为空
+       * 这样校验的话才会先校验不为空再校验长度不够，类似于koa的洋葱模型：先包装的，后经过
+       * */
+      let checkUserNameMoreThanSix = submit.before(function () {
+        let username = document.getElementById('username').value;
+        if (username.length < 6) {
+          return alert('用户名长度不够');
+        }
+        return true;
+      });
+      let checkUserNameNotNull = checkUserNameMoreThanSix.before(function () {
+        let username = document.getElementById('username').value;
+        if (!username) {
+          return alert('用户名没有输入');
+        }
+        return true;
+      });
+      document
+        .getElementById('submit-btn')
+        .addEventListener('click', checkUserNameNotNull);
+    </script>
+  </body>
+</html>
