@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="clickMe">点我</button>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+      document.getElementById('clickMe').addEventListener('click', function () {
+        // setTimeout(function () {
+        //   $(this).css('color', 'red');
+        // }, 3000);
+
+        // 使用 $.proxy() 来包含上下文对象
+        setTimeout(
+          $.proxy(function () {
+            $(this).css('color', 'red');
+          }, this),
+          3000
+        );
+
+        // 本质上绑定了上下文对象
+        // function setColor() {
+        //   $(this).css('color', 'red');
+        // }
+        // setColor.bind(this);
+        // setTimeout(setColor, 3000);
+
+        // 自写
+        // function setColor() {
+        //   $(this).css('color', 'red');
+        // }
+
+        // function proxy(fn, context) {
+        //   return function () {
+        //     fn.apply(context, arguments);
+        //   };
+        // }
+        // setColor = proxy(setColor, this);
+        // setTimeout(setColor, 3000);
+      });
+    </script>
+  </body>
+</html>
