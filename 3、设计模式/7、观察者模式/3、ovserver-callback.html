@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script> -->
+    <script>
+      window.jQuery = {
+        Callbacks() {
+          let callbacks = [];
+          function add(callback) {
+            callbacks.push(callback);
+          }
+          function remove(callback) {
+            callbacks = callbacks.filter((item) => item != callback);
+          }
+          function fire() {
+            callbacks.forEach((item) => item());
+          }
+          return {
+            add,
+            remove,
+            fire,
+          };
+        },
+      };
+
+      let callbacks = jQuery.Callbacks();
+      console.log(callbacks);
+      function a1() {
+        console.log('a1');
+      }
+      function a2() {
+        console.log('a2');
+      }
+      function a3() {
+        console.log('a3');
+      }
+      callbacks.add(a1);
+      callbacks.add(a2);
+      callbacks.add(a3);
+      callbacks.remove(a3);
+      callbacks.fire();
+    </script>
+  </body>
+</html>
