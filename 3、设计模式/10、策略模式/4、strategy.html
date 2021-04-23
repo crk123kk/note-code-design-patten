@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="userForm">
+      用户名：<input type="text" name="username" /><br />
+      密码：<input type="text" name="password" /><br />
+      手机号：<input type="text" name="mobile" /><br />
+      <input type="submit" value="提交" />
+    </form>
+    <script>
+      let form = document.getElementById('userForm');
+
+      let validator = (function () {
+        // 定义一个规则数组
+
+        let rules = {
+          noEmpty(val, msg) {
+            if (val === '') {
+              return msg;
+            }
+          },
+          minLength(val, min, msg) {
+            if (val === '' || val.length < min) {
+              return msg;
+            }
+          },
+          maxLength(val, max, msg) {
+            if (val === '' || val.length > max) {
+              return msg;
+            }
+          },
+          isMobile(val, msg) {
+            if (!/1\d{10}/.test(val)) {
+              return msg;
+            }
+          },
+        };
+        // 增加校验项目
+        let checks = [];
+        function add(element, rule) {
+          checks.push(function () {
+            let val = element.value;
+            let name = rule.shift();
+            rule.unshift(val);
+            return rules[name] && rules[name].apply(element, rule);
+          });
+        }
+        function start() {
+          for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            let msg = check();
+            if (msg) {
+              return msg;
+            }
+          }
+        }
+        return {
+          add,
+          start,
+        };
+      })();
+
+      form.onsubmit = function () {
+        validator.add(form.username, ['notEmpty', '用户名不能为空']);
+        validator.add(form.password, ['minLength', 6, '密码不能小于6位']);
+        validator.add(form.password, ['maxLength', 8, '密码不能大于8位']);
+        validator.add(form.mobile, ['isMobile', '输入合法手机号']);
+        let msg = validator.start();
+        if (msg) {
+          alert(msg);
+          return false;
+        }
+        return true;
+      };
+    </script>
+  </body>
+</html>
