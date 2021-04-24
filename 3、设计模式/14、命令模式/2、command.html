@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p id="number">0</p>
+    <button id="addBtn">+</button>
+    <button id="undoBtn">undo</button>
+    <button id="redoBtn">redo</button>
+    <script>
+      let number = document.getElementById('number');
+      let worker = {
+        // oldVal: 0,
+        // 存放历史记录
+        history: [],
+        // 记录需要取的值的指针：模拟栈结构
+        index: -1,
+        add() {
+          let oldVal = isNaN(number.innerHTML) ? 0 : parseInt(number.innerHTML);
+          //   worker.oldVal = oldVal;
+          //   number.innerHTML = oldVal + 1;
+          let newVal = oldVal + 1;
+          worker.history.push(newVal);
+          worker.index = worker.history.length - 1;
+          number.innerHTML = newVal;
+        },
+        undo() {
+          //   number.innerHTML = worker.oldVal;
+          if (worker.index > 0) {
+            worker.index--;
+            number.innerHTML = worker.history[worker.index];
+          }
+        },
+        redo() {
+          if (worker.index < worker.history.length - 1) {
+            worker.index++;
+            number.innerHTML = worker.history[worker.index];
+          }
+        },
+      };
+      class AddCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.add();
+        }
+      }
+      class UndoCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.undo();
+        }
+      }
+      class RedoCommand {
+        constructor(receiver) {
+          this.receiver = receiver;
+        }
+        execute() {
+          this.receiver.redo();
+        }
+      }
+      let addCommand = new AddCommand(worker);
+      let undoCommand = new UndoCommand(worker);
+      let redoCommand = new RedoCommand(worker);
+      document
+        .getElementById('addBtn')
+        .addEventListener('click', () => addCommand.execute());
+      document
+        .getElementById('undoBtn')
+        .addEventListener('click', () => undoCommand.execute());
+      document
+        .getElementById('redoBtn')
+        .addEventListener('click', () => redoCommand.execute());
+    </script>
+  </body>
+</html>
