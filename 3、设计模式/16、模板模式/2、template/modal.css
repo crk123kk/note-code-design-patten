@@ -1,0 +1,37 @@
+.modal {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -200px;
+  border: 1px solid #000;
+  background-color: #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .button {
+  width: 100px;
+  height: 20px;
+  position: absolute;
+  border: none;
+  outline: none;
+  bottom: 20px;
+  background-color: greenyellow;
+}
+.modal .confirm-button {
+  right: 140px;
+}
+.modal .cancel-button {
+  right: 20px;
+}
+
+.close-me {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
