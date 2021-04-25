@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="news"></ul>
+    <button id="nextPage" onclick="goNext()">下一页</button>
+    <script>
+      let list = [];
+      for (let i = 1; i <= 20; i++) {
+        list.push(`新闻${i}`);
+      }
+
+      let getLi = (function () {
+        // 我们只需要创建并保持5个li就可以了
+        let lis = [];
+        return function () {
+          let element;
+          if (lis.length < 5) {
+            element = document.createElement('li');
+            lis.push(element);
+          } else {
+            // 从左端删除
+            element = lis.shift();
+            // 添加右端
+            lis.push(element);
+          }
+          return element;
+        };
+      })();
+
+      let pageNum = 0;
+      let pageSize = 5;
+      let news = document.getElementById('news');
+
+      function goNext() {
+        pageNum++;
+        let start = (pageNum - 1) * pageSize;
+        for (let i = 0; i < 5; i++) {
+          let element = getLi();
+          element.innerHTML = list[start + i];
+          news.appendChild(element);
+        }
+      }
+      goNext();
+    </script>
+  </body>
+</html>

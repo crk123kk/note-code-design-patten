@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="news"></ul>
+    <button id="nextPage" onclick="goNext()">下一页</button>
+    <script>
+      let list = [];
+      for (let i = 1; i <= 20; i++) {
+        list.push(`新闻${i}`);
+      }
+      let pageNum = 0;
+      let pageSize = 5;
+      let news = document.getElementById('news');
+      for (let i = 0; i < list.length; i++) {
+        let li = document.createElement('li');
+        li.style.display = 'none';
+        li.innerHTML = list[i];
+        news.appendChild(li);
+      }
+      function goNext() {
+        pageNum++;
+        let start = (pageNum - 1) * pageSize;
+        let lis = document.getElementsByTagName('li');
+        for (let i = 0; i < lis.length; i++) {
+          let li = lis[i];
+          if (i >= start && i < start + pageSize) {
+            li.style.display = 'block';
+          } else {
+            li.style.display = 'none';
+          }
+        }
+      }
+      goNext();
+    </script>
+  </body>
+</html>

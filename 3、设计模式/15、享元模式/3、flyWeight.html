@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="radio" value="red" name="color" checked />红色
+    <input type="radio" value="yellow" name="color" />黄色
+    <input type="radio" value="blue" name="color" />蓝色
+
+    <button onclick="draw()">绘制</button>
+    <div id="container"></div>
+    <script>
+      class MyDiv {
+        constructor() {
+          this.element = document.createElement('div');
+        }
+        setColor(color) {
+          this.element.style = `width: 100px;height: 100px;background-color:${color}`;
+        }
+      }
+
+      let myDiv = new MyDiv();
+
+      /**
+       *  通过享元模式让 dom元素只创建一次，并且公用一个
+       **/
+      function draw() {
+        let btns = Array.from(document.getElementsByName('color'));
+        let btn = btns.find((item) => item.checked);
+        let color = btn ? btn.value : 'red';
+        // let div = document.createElement('div');
+        // div.style = `width: 100px;height: 100px;background-color:${color}`;
+        // document.getElementById('container').appendChild(div);
+        myDiv.setColor(color);
+        document.getElementById('container').appendChild(myDiv.element);
+      }
+    </script>
+  </body>
+</html>
